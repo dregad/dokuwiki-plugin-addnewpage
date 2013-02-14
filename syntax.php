@@ -121,12 +121,12 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $root_disabled = (auth_quickaclcheck($data.":") < AUTH_CREATE);
             if ($data=='') {
                 if (!$root_disabled) {
-                    $ret.='<option '.(($ns=='')?'selected="true"':'').' value="">'.((@$this->getLang('namespaceRoot'))?$this->getLang('namespaceRoot'):'top').'</option>';
+                    $ret.='<option '.(($ns=='')?'selected ':'').'value="">'.((@$this->getLang('namespaceRoot'))?$this->getLang('namespaceRoot'):'top').'</option>';
                     $someopt=true;
                 }
             } else {
                 if (!$root_disabled) {
-                    $ret.='<option '.(($ns==$data)?'selected="true"':'').' value="'.$data.'">'.$data.'</option>';
+                    $ret.='<option '.(($ns==$data)?'selected ':'').'value="'.$data.'">'.$data.'</option>';
                     $someopt=true;
                 }
             }
@@ -141,7 +141,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             if (auth_quickaclcheck($v . ":") < AUTH_CREATE) continue;
             $vv = explode(':', $v);
             $vv = str_repeat('&nbsp;&nbsp;', substr_count($v, ':')) . $vv[count($vv) - 1];
-            $ret.='<option ' . (($ns == $v) ? 'selected="true"' : '') . ' value="' . $v . '">' . $vv . '</option>';
+            $ret.='<option '.(($ns == $v) ? 'selected ' : '').'value="'.$v.'">'.$vv.'</option>';
             $someopt = true;
         }
         $ret.='</select>';
