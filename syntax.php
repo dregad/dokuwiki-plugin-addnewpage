@@ -86,6 +86,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      */
     function _parse_ns($ns) {
         global $ID;
+	if ($ns == "@PAGE@") return $ID;
+	if ($ns == "@NS@") return getNS($ID);
         $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
         $ns = str_replace("/", ":", $ns);
         $ns = cleanID($ns);
