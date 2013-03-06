@@ -23,9 +23,9 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      */
     function getInfo() {
         return array(
-            'author' => 'iDo',
-            'email' => 'ido@idotech.info',
-            'date' => '2013-02-14',
+            'author' => 'iDo, Sam Wilson, Michael Braun',
+            'email' => '',
+            'date' => '2013-03-06',
             'name' => 'addnewpage',
             'desc' => 'Adds a "new page form" to any wiki page.',
             'url' => 'https://wiki.dokuwiki.org/plugin:addnewpage',
@@ -82,12 +82,13 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     /**
      * Parse namespace request
      *
-     * @author  Samuele Tognini <samuele@cli.di.unipi.it>
+     * @author Samuele Tognini <samuele@cli.di.unipi.it>
+     * @author Michael Braun <michael-dev@fami-braun.de>
      */
     function _parse_ns($ns) {
         global $ID;
-	if ($ns == "@PAGE@") return $ID;
-	if ($ns == "@NS@") return getNS($ID);
+        if ($ns == "@PAGE@") return $ID;
+        if ($ns == "@NS@") return getNS($ID);
         $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
         $ns = str_replace("/", ":", $ns);
         $ns = cleanID($ns);
