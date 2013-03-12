@@ -14,12 +14,19 @@ jQuery(document).ready(function() {
         }
     });
 
-    // Change the form's action on submit
+    // Change the form's page-ID field on submit
     $editform = jQuery(".addnewpage form").submit(function(e) {
-        var ns = jQuery(this).find("[name='np_cat']").val();
-        var title = jQuery(this).find("input[name='title']").val();
-        var action = DOKU_BASE+"?do=edit&id="+ns+":"+title;
-        jQuery(this).attr("action", action);
+
+        // Build the new page ID and save in hidden form field
+        var ns = jQuery(this).find("[name='np_cat']");
+        var title = jQuery(this).find("input[name='title']");
+        var id = ns.val()+":"+title.val();
+        jQuery(this).find("input[name='id']").val(id);
+
+        // Clean up the form vars, just to make the resultant URL a bit nicer
+        ns.attr("disabled", "disabled");
+        title.attr("disabled", "disabled");
+
         return true;
     });
 

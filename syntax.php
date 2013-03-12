@@ -25,7 +25,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'iDo, Sam Wilson, Michael Braun',
             'email' => '',
-            'date' => '2013-03-06',
+            'date' => '2013-03-12',
             'name' => 'addnewpage',
             'desc' => 'Adds a "new page form" to any wiki page.',
             'url' => 'https://wiki.dokuwiki.org/plugin:addnewpage',
@@ -66,9 +66,11 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
             $button_val = ((@$this->getLang('okbutton')) ? $this->getLang('okbutton') : 'ok');
             $form = '<div class="addnewpage">'.DOKU_LF
-                .DOKU_TAB.'<form name="addnewpage" method="post" accept-charset="'.$lang['encoding'].'">'.DOKU_LF
+                .DOKU_TAB.'<form name="addnewpage" method="get" action="'.DOKU_BASE.DOKU_SCRIPT.'" accept-charset="'.$lang['encoding'].'">'.DOKU_LF
                 .DOKU_TAB.DOKU_TAB.$ns_select.DOKU_LF
                 .DOKU_TAB.DOKU_TAB.'<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />'.DOKU_LF
+                .DOKU_TAB.DOKU_TAB.'<input type="hidden" name="do" value="edit" />'.DOKU_LF
+                .DOKU_TAB.DOKU_TAB.'<input type="hidden" name="id" />'.DOKU_LF
                 .DOKU_TAB.DOKU_TAB.'<input class="button" type="submit" value="'.$button_val.'" tabindex="3" />'.DOKU_LF
                 .DOKU_TAB.'</form>'.DOKU_LF
                 .'</div>';
