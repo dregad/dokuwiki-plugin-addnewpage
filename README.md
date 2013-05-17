@@ -16,3 +16,4 @@ If you give @NS@ or @PAGE@ as namespace, the namespace of the current page or th
 - Moved to Github by hamstar <hamstar@telescum.co.nz>, 2012.
 - Updated by Sam Wilson <sam@samwilson.id.au>, 2013.
 - Updated by Michael Braun <michael-dev@fami-braun.de>, 2013.
+- Improved by Róbert Toth (FurloSK), 2013.

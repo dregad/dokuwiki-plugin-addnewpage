@@ -25,7 +25,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'iDo, Sam Wilson, Michael Braun',
             'email' => '',
-            'date' => '2013-03-12',
+            'date' => '2013-05-17',
             'name' => 'addnewpage',
             'desc' => 'Adds a "new page form" to any wiki page.',
             'url' => 'https://wiki.dokuwiki.org/plugin:addnewpage',
@@ -101,16 +101,26 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * Create the HTML Select element for namespace selection.
      * 
      * @global string $ID The page ID
-     * @param string|false $data The destination namespace, or false if none provided.
+     * @param string|false $dest_ns The destination namespace, or false if none provided.
      * @return string Select element with appropriate NS selected.
      */
     function _makecombo($data) {
         global $ID;
 
+        // If a NS has been provided:
+        // Whether to hide the NS selection (otherwise, show only subnamespaces).
         $hide = $this->getConf('addpage_hide');
 
-        if (($data != "") && ($hide)) {
-            return '<input type="hidden" name="np_cat" id="np_cat" value="'.$this->_parse_ns($data).'"/>';
+        // Whether the user can create pages in the provided NS (or root, if no
+        // destination NS has been set.
+        $can_create = (auth_quickaclcheck($dest_ns.":") >= AUTH_CREATE);
+
+        if (!empty($dest_ns) && $hide) {
+            if ($can_create) {
+                return '<input type="hidden" name="np_cat" id="np_cat" value="'.$this->_parse_ns($dest_ns).'"/>';
+            } else {
+                return $this->getLang('nooption');
+            }
         }
 
         $ns = explode(':', $ID);
@@ -120,20 +130,20 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $r = $this->_getnslist("");
         $ret = '<select class="edit" id="np_cat" name="np_cat" tabindex="1">';
 
+        // Whether the NS select element has any options
         $someopt=false;
 
-        if ($this->getConf('addpage_showroot')) {
-            $root_disabled = (auth_quickaclcheck($data.":") < AUTH_CREATE);
-            if ($data=='') {
-                if (!$root_disabled) {
-                    $ret.='<option '.(($ns=='')?'selected ':'').'value="">'.((@$this->getLang('namespaceRoot'))?$this->getLang('namespaceRoot'):'top').'</option>';
-                    $someopt=true;
-                }
+        // Show root namespace if requested and allowed
+        if ($this->getConf('addpage_showroot') && $can_create) {
+            if (empty($dest_ns)) {
+                // If no namespace has been provided, add an option for the root NS.
+                $option_text = ((@$this->getLang('namespaceRoot'))?$this->getLang('namespaceRoot'):'top');
+                $ret.='<option '.(($ns=='')?'selected ':'').'value="">'.$option_text.'</option>';
+                $someopt=true;
             } else {
-                if (!$root_disabled) {
-                    $ret.='<option '.(($ns==$data)?'selected ':'').'value="'.$data.'">'.$data.'</option>';
-                    $someopt=true;
-                }
+                // If a namespace has been provided, add an option for it.
+                $ret.='<option '.(($ns==$dest_ns)?'selected ':'').'value="'.$dest_ns.'">'.$dest_ns.'</option>';
+                $someopt=true;
             }
         }
 

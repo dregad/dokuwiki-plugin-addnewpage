@@ -2,7 +2,7 @@
 base   addnewpage
 author iDo, Sam Wilson, Michael Braun
 email  
-date   2013-03-12
+date   2013-05-17
 name   Add New Page
 desc   Adds a "new page form" to any wiki page.
 url    http://www.dokuwiki.org/plugin:addnewpage
