@@ -2,7 +2,7 @@
 jQuery(document).ready(function() {
 
     // Start with disabled submit button
-    jQuery(".addnewpage :submit").attr("disabled", "disabled");
+    jQuery(".addnewpage :submit").prop("disabled", true);
     // Then enable it when a title is entered
     jQuery(".addnewpage input[name='title']").keyup(function(){
         var $submit = jQuery(this).parent("form").find(":submit");
@@ -24,8 +24,8 @@ jQuery(document).ready(function() {
         jQuery(this).find("input[name='id']").val(id);
 
         // Clean up the form vars, just to make the resultant URL a bit nicer
-        ns.attr("disabled", "disabled");
-        title.attr("disabled", "disabled");
+        ns.prop("disabled", true);
+        title.prop("disabled", true);
 
         return true;
     });
