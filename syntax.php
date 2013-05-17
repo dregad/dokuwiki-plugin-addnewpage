@@ -104,7 +104,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @param string|false $dest_ns The destination namespace, or false if none provided.
      * @return string Select element with appropriate NS selected.
      */
-    function _makecombo($data) {
+    function _makecombo($dest_ns) {
         global $ID;
 
         // If a NS has been provided:
