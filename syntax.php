@@ -165,11 +165,21 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         return $ret;
     }
 
+    /**
+     * Get a list of namespaces below the given namespace.
+     * Recursively fetches subnamespaces.
+     * 
+     * Includes inc/search.php
+     * @global array $conf Site configuration variables
+     * @uses utf8_encodeFN
+     * @param string $tns The top namespace
+     * @return array Multi-dimensional array of all namespaces below $tns
+     */
     function _getnslist($tns = '') {
         require_once(DOKU_INC . 'inc/search.php');
         global $conf;
         if ($tns == '') $tns = $conf['datadir'];
-        if (!is_dir($tns)) $tns = str_replace(':', '/', $tns);
+        if (!is_dir($tns)) $tns = utf8_encodeFN(str_replace(':', '/', $tns));
         $data = array();
         $exclude = $this->getConf('addpage_exclude');
 
