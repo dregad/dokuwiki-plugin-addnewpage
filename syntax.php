@@ -25,7 +25,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'iDo, Sam Wilson, Michael Braun',
             'email' => '',
-            'date' => '2013-05-17',
+            'date' => '2013-06-20',
             'name' => 'addnewpage',
             'desc' => 'Adds a "new page form" to any wiki page.',
             'url' => 'https://wiki.dokuwiki.org/plugin:addnewpage',
