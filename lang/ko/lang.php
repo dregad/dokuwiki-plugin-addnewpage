@@ -1,9 +1,10 @@
 <?php
-/*
- * Korean language file
- */
-$lang['namespaceRoot'] = "루트";
-$lang['okbutton']      = "페이지 추가";
-$lang['nooption']      = "페이지를 추가할 권한이 없습니다";
-//Setup VIM: ex: et ts=2 enc=utf-8 :
 
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author Myeongjin <aranet100@gmail.com>
+ */
+$lang['namespaceRoot']         = '루트';
+$lang['okbutton']              = '문서 추가';
+$lang['nooption']              = '문서를 추가할 권한이 없습니다';
