@@ -42,9 +42,11 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $this->Lexer->addSpecialPattern('\{\{NEWPAGE[^\}]*\}\}', $mode, 'plugin_addnewpage');
     }
 
+    // @codingStandardsIgnoreStart
     function handle($match, $state, $pos, &$handler) {
-        $ns = substr($match, 10, -2);  // strip markup
-        return array($ns); // use an array here
+        // @codingStandardsIgnoreEnd
+        $ns = substr($match, 10, -2); // strip markup
+        return array($ns);
     }
 
     /**

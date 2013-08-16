@@ -1,4 +1,3 @@
-
 jQuery(document).ready(function() {
 
     // Start with disabled submit button
