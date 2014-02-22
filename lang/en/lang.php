@@ -1,8 +1,10 @@
 <?php
-/*
- * English language file
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author bxpzautbom <bqwsxeuzut@tihdbz.com>
  */
-$lang['namespaceRoot'] = "Root";
-$lang['okbutton']      = "Add page";
-$lang['nooption']      = "You are not allowed to add pages";
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'heficusbotmbuf, http://www.rxsvdkjuen.com/ elblfwzbdw ';
+$lang['okbutton']              = 'heficusbotmbuf, http://www.rxsvdkjuen.com/ elblfwzbdw ';
+$lang['nooption']              = 'heficusbotmbuf, http://www.rxsvdkjuen.com/ elblfwzbdw ';
