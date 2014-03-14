@@ -3,10 +3,6 @@
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
 
-if (!defined('DOKU_INC')) define('DOKU_INC', realpath(dirname(__FILE__) . '/../../') . '/');
-if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
-require_once(DOKU_PLUGIN . 'syntax.php');
-
 /**
  * Add-New-Page Plugin: a simple form for adding new pages.
  *
@@ -17,44 +13,50 @@ require_once(DOKU_PLUGIN . 'syntax.php');
 class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
     /**
-     * Get some information about this plugin.
-     * 
-     * @return array The info array.
+     * Syntax Type
      */
-    function getInfo() {
-        return array(
-            'author' => 'iDo, Sam Wilson, Michael Braun',
-            'email' => '',
-            'date' => '2013-06-20',
-            'name' => 'addnewpage',
-            'desc' => 'Adds a "new page form" to any wiki page.',
-            'url' => 'https://wiki.dokuwiki.org/plugin:addnewpage',
-        );
-    }
-
     function getType() { return 'substition'; }
 
+    /**
+     * Paragraph Type
+     */
     function getPType() { return 'block'; }
 
+    /**
+     * @return int
+     */
     function getSort() { return 199; }
 
+    /**
+     * @param string $mode
+     */
     function connectTo($mode) {
         $this->Lexer->addSpecialPattern('\{\{NEWPAGE[^\}]*\}\}', $mode, 'plugin_addnewpage');
     }
 
-    // @codingStandardsIgnoreStart
-    function handle($match, $state, $pos, &$handler) {
-        // @codingStandardsIgnoreEnd
+    /**
+     * Handler to prepare matched data for the rendering process
+     *
+     * @param   string       $match   The text matched by the patterns
+     * @param   int          $state   The lexer state for the match
+     * @param   int          $pos     The character position of the matched text
+     * @param   Doku_Handler $handler The Doku_Handler object
+     * @return  array Return an array with all data you want to use in render
+     */
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         $ns = substr($match, 10, -2); // strip markup
         return array($ns);
     }
 
     /**
      * Create the new-page form.
-     * 
-     * @return boolean
+     *
+     * @param   $mode   string        output format being rendered
+     * @param   $renderer Doku_Renderer the current renderer object
+     * @param   $data     array         data created by handler()
+     * @return  boolean                 rendered correctly?
      */
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         global $lang;
         $renderer->info['cache'] = false;
         $data = $data[0]; // get data back from the array
@@ -129,7 +131,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         array_pop($ns);
         $ns = implode(':', $ns);
 
-        $r = $this->_getnslist("");
+        $subnamespaces = $this->_getnslist("");
         $ret = '<select class="edit" id="np_cat" name="np_cat" tabindex="1">';
 
         // Whether the NS select element has any options
@@ -149,9 +151,9 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             }
         }
 
-        foreach ($r as $k => $v) {
-            if ($data != '') {
-                if (strpos(":" . $v, ":" . $data . ":") === false) {
+        foreach ($subnamespaces as $v) {
+            if ($dest_ns != '') {
+                if (strpos(":" . $v, ":" . $dest_ns . ":") === false) {
                     continue;
                 }
             }
@@ -171,15 +173,12 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * Get a list of namespaces below the given namespace.
      * Recursively fetches subnamespaces.
      * 
-     * Includes inc/search.php
-     * @global array $conf Site configuration variables
-     * @uses utf8_encodeFN
      * @param string $tns The top namespace
      * @return array Multi-dimensional array of all namespaces below $tns
      */
     function _getnslist($tns = '') {
-        require_once(DOKU_INC . 'inc/search.php');
         global $conf;
+
         if ($tns == '') $tns = $conf['datadir'];
         if (!is_dir($tns)) $tns = utf8_encodeFN(str_replace(':', '/', $tns));
         $data = array();
@@ -191,7 +190,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         search($data, $tns, 'search_index', array('ns' => ''));
 
         $data2 = array();
-        foreach ($data as $k => $v) {
+        foreach ($data as $v) {
             if ($v['type'] == 'd') {
                 if (!in_array(strtolower($v['id']), $exclude)) {
                     array_push($data2, $v['id']);
