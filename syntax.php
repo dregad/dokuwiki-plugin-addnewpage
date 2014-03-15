@@ -169,12 +169,11 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         if($this->getConf('addpage_showroot') && $can_create) {
             if(empty($dest_ns)) {
                 // If no namespace has been provided, add an option for the root NS.
-                $option_text = ((@$this->getLang('namespaceRoot')) ? $this->getLang('namespaceRoot') : 'top');
-                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . 'value="">' . $option_text . '</option>';
+                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . 'value="">' . $this->getLang('namespaceRoot') . '</option>';
                 $someopt = true;
             } else {
                 // If a namespace has been provided, add an option for it.
-                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '') . 'value="' . $dest_ns . '">' . $dest_ns . '</option>';
+                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '') . 'value="' . formText($dest_ns) . '">' . formText($dest_ns) . '</option>';
                 $someopt = true;
             }
         }
@@ -245,7 +244,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         } else {
             if($cnt == 1) {
                 list($template, ) = $this->_parseNStemplatepage($newpagetemplates[0]);
-                $input = '<input type="hidden" name="newpagetemplate" value="' . $template . '" />';
+                $input = '<input type="hidden" name="newpagetemplate" value="' . formText($template) . '" />';
             } else {
                 $first = true;
                 $input = '<select name="newpagetemplate" tabindex="3">';
