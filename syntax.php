@@ -248,7 +248,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 $input = '<input type="hidden" name="newpagetemplate" value="' . $template . '" />';
             } else {
                 $first = true;
-                $input = '<select tabindex="3">';
+                $input = '<select name="newpagetemplate" tabindex="3">';
                 foreach($newpagetemplates as $template) {
                     $p = ($first ? ' selected="selected"' : '');
                     $first = false;
