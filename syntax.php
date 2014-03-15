@@ -43,6 +43,13 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     /**
      * Handler to prepare matched data for the rendering process
      *
+     * Handled syntax options:
+     *   {{NEWPAGE}}
+     *   {{NEWPAGE>your:namespace}}
+     *   {{NEWPAGE#newtpl1,newtpl2}}
+     *   {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
+     *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
+     *
      * @param   string       $match   The text matched by the patterns
      * @param   int          $state   The lexer state for the match
      * @param   int          $pos     The character position of the matched text
@@ -53,7 +60,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $options = substr($match, 9, -2); // strip markup
         $options = explode('#', $options, 2);
 
-        $namespace = ltrim($options[0], '>');
+        $namespace = trim(ltrim($options[0], '>'));
         $templates = explode(',', $options[1]);
         $templates = array_map('trim', $templates);
         return array(
