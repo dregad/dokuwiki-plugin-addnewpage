@@ -11,10 +11,10 @@ jQuery(document).ready(function() {
             // For when the user deletes the text
             $submit.attr("disabled", "disabled");
         }
-    });
+    }).keyup();
 
     // Change the form's page-ID field on submit
-    $editform = jQuery(".addnewpage form").submit(function(e) {
+    jQuery(".addnewpage form").submit(function(e) {
 
         // Build the new page ID and save in hidden form field
         var ns = jQuery(this).find("[name='np_cat']");
