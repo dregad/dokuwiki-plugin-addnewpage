@@ -55,8 +55,10 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @param   int          $pos     The character position of the matched text
      * @param   Doku_Handler $handler The Doku_Handler object
      * @return  array Return an array with all data you want to use in render
+     * @codingStandardsIgnoreStart
      */
     public function handle($match, $state, $pos, Doku_Handler $handler) {
+        /* @codingStandardsIgnoreEnd */
         $options = substr($match, 9, -2); // strip markup
         $options = explode('#', $options, 2);
 
@@ -118,7 +120,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @author Samuele Tognini <samuele@cli.di.unipi.it>
      * @author Michael Braun <michael-dev@fami-braun.de>
      */
-    protected function _parse_ns($ns) {
+    protected function _parseNS($ns) {
         global $ID;
         if($ns == "@PAGE@") return $ID;
         if($ns == "@NS@") return getNS($ID);
@@ -151,7 +153,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         //namespace given, but hidden
         if($hide && !empty($dest_ns)) {
             if($can_create) {
-                return '<input type="hidden" name="np_cat" id="np_cat" value="' . $this->_parse_ns($dest_ns) . '"/>';
+                return '<input type="hidden" name="np_cat" id="np_cat" value="' . $this->_parseNS($dest_ns) . '"/>';
             } else {
                 return false;
             }
@@ -178,7 +180,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             }
         }
 
-        $subnamespaces = $this->_getnslist($dest_ns);
+        $subnamespaces = $this->_getNamespaceList($dest_ns);
         foreach($subnamespaces as $ns) {
             if(auth_quickaclcheck($ns . ":") < AUTH_CREATE) continue;
             $nsparts = explode(':', $ns);
@@ -203,7 +205,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @param string $topns The top namespace
      * @return array Multi-dimensional array of all namespaces below $tns
      */
-    protected function _getnslist($topns = '') {
+    protected function _getNamespaceList($topns = '') {
         global $conf;
 
         $topns = utf8_encodeFN(str_replace(':', '/', $topns));
@@ -243,7 +245,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         } else {
             if($cnt == 1) {
-                list($template, ) = $this->_parseNStemplatepage($newpagetemplates[0]);
+                list($template, ) = $this->_parseNSTemplatePage($newpagetemplates[0]);
                 $input = '<input type="hidden" name="newpagetemplate" value="' . formText($template) . '" />';
             } else {
                 $first = true;
@@ -252,7 +254,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                     $p = ($first ? ' selected="selected"' : '');
                     $first = false;
 
-                    list($template, $name) = $this->_parseNStemplatepage($template);
+                    list($template, $name) = $this->_parseNSTemplatePage($template);
                     $p .= ' value="'.formText($template).'"';
                     $input .= "<option $p>".formText($name)."</option>";
                 }
@@ -269,7 +271,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @param $nstemplate
      * @return array
      */
-    protected function _parseNStemplatepage($nstemplate) {
+    protected function _parseNSTemplatePage($nstemplate) {
         global $ID;
 
         @list($template, $name) = explode('|', $nstemplate, 2);
