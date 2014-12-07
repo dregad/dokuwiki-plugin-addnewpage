@@ -1,8 +1,10 @@
 <?php
-/*
- * Arabic language file by Ojuba.org team <core AT ojuba DOT org>
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author Ali Almlfy <Almlfy@hotmail.com>
  */
-$lang['namespaceRoot'] = "الجذر";
-$lang['okbutton']      = "أضف الصفحة";
-$lang['nooption']      = "لا يسمح لك إضافة الصفحات";
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'الجذر';
+$lang['okbutton']              = 'أضف صفحة';
+$lang['nooption']              = 'لا يسمح لك إضافة صفحات';
