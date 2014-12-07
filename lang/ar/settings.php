@@ -1,11 +1,11 @@
 <?php
-/*USE : UTF8*/
 
-/*
- * Arabic language file by Ojuba.org team <core AT ojuba DOT org>
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author Ali Almlfy <Almlfy@hotmail.com>
  */
-$lang['addpage_exclude']  = "الفضاءات المسثناة (تفصل بينها ;)";
-$lang['addpage_showroot'] = "اعرض فضاء الجذر";
-$lang['addpage_hide']     = "عند استعمال صيغة {{NEWPAGE>[ns]}}: أخفي اختيار فضاء التسمية (وإلا فإنه سيظهر الفضاءات الفرعية)";
-$lang['addpage_hideACL']  = "اخفاء {{NEWPAGE}} إن لم يكن للمستخدم الحق في إضافة صفحات (وإلا فإنها ستظهر)";
-
+$lang['addpage_exclude']       = 'النطقات المسثناة (يفصل بينها بـ ;)';
+$lang['addpage_showroot']      = 'اعرض نطاق الجذر';
+$lang['addpage_hide']          = 'عند استعمال صيغة {{صفحة جديدة>[ns]}}: أخفي اختيار تسمية النطاق (وإلا فإنه سيظهر النطاق الفرعية)';
+$lang['addpage_hideACL']       = 'اخفاء {{صفحة جديد}} إن لم يكن للمستخدم الحق في إضافة صفحات (وإلا فإنها ستظهر)';
