@@ -1,6 +1,6 @@
 # General Plugin Info
 base   addnewpage
-author iDo, Sam Wilson, Michael Braun, Gerrit Uitslag
+author Benjamin Santalucia, Sam Wilson, Michael Braun, Gerrit Uitslag
 email  
 date   2014-05-16
 name   Add New Page
