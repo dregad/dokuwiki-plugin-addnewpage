@@ -1,0 +1,22 @@
+/*
+Screen Styles for the Add-New_Page Plugin
+*/
+
+/* Add 'new page'-button to pagetools */
+#dokuwiki__pagetools ul li a.addnewpage {
+    background-position: right 0;
+}
+#dokuwiki__pagetools ul li a.addnewpage:before {
+    content: url(images/pagetools-addnewpage.png);
+    margin-top: 0;
+}
+#dokuwiki__pagetools:hover ul li a.addnewpage,
+#dokuwiki__pagetools ul li a.addnewpage:focus,
+#dokuwiki__pagetools ul li a.addnewpage:active {
+    background-image: url(images/pagetools-addnewpage.png);
+}
+#dokuwiki__pagetools ul li a.addnewpage:hover,
+#dokuwiki__pagetools ul li a.addnewpage:active,
+#dokuwiki__pagetools ul li a.addnewpage:focus {
+    background-position: right -45px;
+}
