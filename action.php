@@ -27,9 +27,11 @@ class action_plugin_addnewpage extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event
      */
     public function addbutton(Doku_Event $event) {
-        global $ID;
+        global $ID, $INFO;
+        $can_create = $INFO['perm'];
 
-        if($this->getConf('addpage_path') != '' && $this->getConf('addpage_hideACL') == 0 && $event->data['view'] == 'main') {
+        if($this->getConf('addpage_path') != '' && $can_create >= AUTH_CREATE && $event->data['view'] == 'main') {
+            echo $perm;
             $params = array('id' => $this->getConf('addpage_path'));
 
             // insert button at position before last (up to top)
