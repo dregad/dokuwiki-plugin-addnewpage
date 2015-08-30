@@ -18,7 +18,33 @@ class action_plugin_addnewpage extends DokuWiki_Action_Plugin {
      * @param Doku_Event_Handler $controller
      */
     public function register(Doku_Event_Handler $controller) {
+        $controller->register_hook("TPL_CONTENT_DISPLAY", 'BEFORE', $this, 'notallow', array ());
         $controller->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton', array());
+    }
+
+    /**
+     * Hide the form or show a warning message if the user is not allowed
+     * to create new pages
+     *
+     * @param Doku_Event $event
+     */
+    public function notallow(Doku_Event $event) {
+        global $INFO;
+        $can_create = $INFO['perm'];
+        $re = '/(<div class=\"addnewpage\">.*?<\/div>)/s';
+
+        if($this->getConf('addpage_hideACL')) {
+            if ($can_create < AUTH_CREATE) {
+                $subst = '';
+                $event->data = preg_replace($re, $subst, $event->data, 1);
+            }
+        }
+        else {
+            if ($can_create < AUTH_CREATE) {
+                $subst = $this->getLang('nooption');
+                $event->data = preg_replace($re, $subst, $event->data, 1);
+            }
+        }
     }
 
     /**
