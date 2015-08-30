@@ -41,7 +41,7 @@ class action_plugin_addnewpage extends DokuWiki_Action_Plugin {
         }
         else {
             if ($can_create < AUTH_CREATE) {
-                $subst = $this->getLang('nooption');
+                $subst = "<div class='error'>" . $this->getLang('nooption') . "</div>";
                 $event->data = preg_replace($re, $subst, $event->data, 1);
             }
         }
