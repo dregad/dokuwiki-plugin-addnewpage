@@ -48,7 +48,9 @@ class action_plugin_addnewpage extends DokuWiki_Action_Plugin {
     }
 
     /**
-     * Add 'new page'-button to pagetools
+     * If in Configuration Manager is given the path to the new-page form and
+     * if the user is allowed to create new pages
+     * then show the 'Add page' button into the page tools
      *
      * @param Doku_Event $event
      */
