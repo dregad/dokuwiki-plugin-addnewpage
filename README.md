@@ -10,7 +10,7 @@ This is free software, released under the [GPL version 2](https://www.gnu.org/li
     {{NEWPAGE[>namespace]}}
 
 Where namespace is optional, and indicates the destination namespace for the new page.
-If you give @NS@ or @PAGE@ as namespace, the namespace of the current page or the current page id will be used.
+If you give @NS@ or @PAGE@ as namespace, the namespace of the current page or the current page ID will be used.
 
 ## Authors
 
@@ -20,3 +20,4 @@ If you give @NS@ or @PAGE@ as namespace, the namespace of the current page or th
 - Updated by Michael Braun <michael-dev@fami-braun.de>, 2013.
 - Improved by Róbert Toth (FurloSK), 2013.
 - Support for newpagetemplate added by Gerrit Uitslag <klapinklapin@gmail.com>, 2014.
+- Disabling of restricted parent namespaces by Albert Chern, 2015.

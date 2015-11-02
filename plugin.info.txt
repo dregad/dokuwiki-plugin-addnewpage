@@ -1,8 +1,8 @@
 # General Plugin Info
 base   addnewpage
-author Benjamin Santalucia, Sam Wilson, Michael Braun, Gerrit Uitslag
+author Benjamin Santalucia, Sam Wilson, Michael Braun, Gerrit Uitslag, Albert Chern
 email  
-date   2015-03-16
+date   2015-11-02
 name   Add New Page
 desc   Adds a "new page form" to any wiki page.
 url    http://www.dokuwiki.org/plugin:addnewpage
