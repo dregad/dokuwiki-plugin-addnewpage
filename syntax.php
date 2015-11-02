@@ -181,14 +181,38 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         }
 
         $subnamespaces = $this->_getNamespaceList($dest_ns);
+
+        // The top of this stack will always be the last printed ancestor namespace
+        $ancestor_stack = array();
+        if (!empty($dest_ns)) {
+            array_push($ancestor_stack, $dest_ns);
+        }
+
         foreach($subnamespaces as $ns) {
+
             if(auth_quickaclcheck($ns . ":") < AUTH_CREATE) continue;
+
+            // Pop any elements off the stack that are not ancestors of the current namespace
+            while(!empty($ancestor_stack) && strpos($ns, $ancestor_stack[count($ancestor_stack) - 1] . ':') !== 0) {
+                array_pop($ancestor_stack);
+            }
+
             $nsparts = explode(':', $ns);
-            $nsparts = str_repeat('&nbsp;&nbsp;', substr_count($ns, ':')) . $nsparts[count($nsparts) - 1];
-            $ret .= '<option ' . (($currentns == $ns) ? 'selected ' : '') . 'value="' . $ns . '">' . $nsparts . '</option>';
+            $first_unprinted_depth = empty($ancestor_stack)? 1 : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
+            for ($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
+                $namespace = implode(':', array_slice($nsparts, 0, $i));
+                array_push($ancestor_stack, $namespace);
+                $selectOptionText = str_repeat('&nbsp;&nbsp;', substr_count($namespace, ':')) . $nsparts[$i - 1];
+                $ret .= '<option ' .
+                    (($currentns == $namespace) ? 'selected ' : '') .
+                    ($i == $end? ('value="' . $namespace . '">') : 'disabled>') .
+                    $selectOptionText .
+                    '</option>';
+            }
             $someopt = true;
             $disablecache = true;
         }
+
         $ret .= '</select>';
 
         if($someopt) {
