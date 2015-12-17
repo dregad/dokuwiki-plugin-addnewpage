@@ -1,8 +1,10 @@
 <?php
-/*
-portuguese language file
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author Alfredo Silva <alfredo.silva@sky.com>
  */
-$lang['namespaceRoot'] = "Root";
-$lang['okbutton']      = "Incluir Página";
-$lang['nooption']      = "Você não tem permissão para incluir página";
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'Raiz';
+$lang['okbutton']              = 'Adicionar página';
+$lang['nooption']              = 'Não está autorizado para adicionar páginas';
