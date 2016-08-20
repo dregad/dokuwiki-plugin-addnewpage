@@ -146,14 +146,15 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         // Whether to hide the NS selection (otherwise, show only subnamespaces).
         $hide = $this->getConf('addpage_hide');
 
+        $parsed_dest_ns = $this->_parseNS($dest_ns);
         // Whether the user can create pages in the provided NS (or root, if no
         // destination NS has been set.
-        $can_create = (auth_quickaclcheck($dest_ns . ":") >= AUTH_CREATE);
+        $can_create = (auth_quickaclcheck($parsed_dest_ns . ":") >= AUTH_CREATE);
 
         //namespace given, but hidden
         if($hide && !empty($dest_ns)) {
             if($can_create) {
-                return '<input type="hidden" name="np_cat" id="np_cat" value="' . $this->_parseNS($dest_ns) . '"/>';
+                return '<input type="hidden" name="np_cat" id="np_cat" value="' . $parsed_dest_ns . '"/>';
             } else {
                 return false;
             }
