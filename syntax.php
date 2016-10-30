@@ -49,6 +49,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      *   {{NEWPAGE#newtpl1,newtpl2}}
      *   {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
      *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
+     *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1#@HI@,Howdy}}
      *
      * @param   string       $match   The text matched by the patterns
      * @param   int          $state   The lexer state for the match
@@ -60,14 +61,16 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     public function handle($match, $state, $pos, Doku_Handler $handler) {
         /* @codingStandardsIgnoreEnd */
         $options = substr($match, 9, -2); // strip markup
-        $options = explode('#', $options, 2);
+        $options = explode('#', $options, 3);
 
         $namespace = trim(ltrim($options[0], '>'));
         $templates = explode(',', $options[1]);
         $templates = array_map('trim', $templates);
+        $newpagevars = trim($options[2])
         return array(
             'namespace' => $namespace,
-            'newpagetemplates' => $templates
+            'newpagetemplates' => $templates,
+            'newpagevars' => $newpagevars
         );
     }
 
@@ -102,6 +105,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 . DOKU_TAB . DOKU_TAB . $namespaceinput . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
                 . $newpagetemplateinput
+                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="do" value="edit" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />' . DOKU_LF
