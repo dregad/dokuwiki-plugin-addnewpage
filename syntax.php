@@ -249,7 +249,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $namespaces = array();
         foreach($searchdata as $ns) {
             foreach($excludes as $exclude) {
-                if(strpos($ns['id'], $exclude) === 0) {
+                if( ! empty($exclude) && strpos($ns['id'], $exclude) === 0) {
                     continue 2;
                 }
             }
