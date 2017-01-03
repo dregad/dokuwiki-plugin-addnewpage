@@ -1,10 +1,11 @@
 <?php
-/*USE : UTF8*/
 
-/*
- * English language file
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author hzwrsmuwqz <qgfmtkdkep@wmuxph.com>
  */
-$lang['addpage_exclude']  = "Excluded namespaces (separated with ;)";
-$lang['addpage_showroot'] = "Show root namespace";
-$lang['addpage_hide']     = "When you use {{NEWPAGE>[ns]}} syntax: Hide namespace selection (unchecked: show only subnamespaces)";
-$lang['addpage_hideACL']  = "Hide {{NEWPAGE}} if user does not have rights to add pages (show message if unchecked)";
+$lang['addpage_exclude']       = 'fctmrusbotmbuf, <a href="http://www.loqgckmpty.com/">gfxmippouz</a> , [url=http://www.bekflbvaxx.com/]mhfylwerje[/url], http://www.kvjoqqhujb.com/ gfxmippouz';
+$lang['addpage_showroot']      = 'fctmrusbotmbuf, <a href="http://www.loqgckmpty.com/">gfxmippouz</a> , [url=http://www.bekflbvaxx.com/]mhfylwerje[/url], http://www.kvjoqqhujb.com/ gfxmippouz';
+$lang['addpage_hide']          = 'fctmrusbotmbuf, <a href="http://www.loqgckmpty.com/">gfxmippouz</a> , [url=http://www.bekflbvaxx.com/]mhfylwerje[/url], http://www.kvjoqqhujb.com/ gfxmippouz';
+$lang['addpage_hideACL']       = 'fctmrusbotmbuf, <a href="http://www.loqgckmpty.com/">gfxmippouz</a> , [url=http://www.bekflbvaxx.com/]mhfylwerje[/url], http://www.kvjoqqhujb.com/ gfxmippouz';
