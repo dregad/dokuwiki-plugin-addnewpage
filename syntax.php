@@ -123,12 +123,21 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     protected function _parseNS($ns) {
         global $ID;
         if(strpos($ns, '@PAGE@') !== false) {
-            return cleanID(str_replace('@PAGE@', $ID, $ns));
+          $ns = cleanID(str_replace('@PAGE@', $ID, $ns));
+        } elseif($ns == "@NS@") {
+          $ns = getNS($ID);
+        } else {
+          $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
+          $ns = str_replace("/", ":", $ns);
+          $ns = cleanID($ns);
         }
-        if($ns == "@NS@") return getNS($ID);
-        $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
-        $ns = str_replace("/", ":", $ns);
-        $ns = cleanID($ns);
+        $trimSuffix = trim($this->getConf('addpage_trimSuffix'));
+        if (strlen($trimSuffix) > 0) {
+          if (substr(strtolower($ns), -1-strlen($trimSuffix)) == strtolower(":".$trimSuffix))
+            $ns = substr($ns, 0, -1-strlen($trimSuffix));
+          if (substr(strtolower($ns), -2-strlen($trimSuffix)) == strtolower(":".$trimSuffix).":")
+            $ns = substr($ns, 0, -1-strlen($trimSuffix));
+        }
         return $ns;
     }
 
