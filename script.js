@@ -20,7 +20,11 @@ jQuery(document).ready(function() {
         var ns = jQuery(this).find("[name='np_cat']");
         var title = jQuery(this).find("input[name='title']");
         var id = ns.val()+":"+title.val();
-        jQuery(this).find("input[name='id']").val(id);
+        var $idInput =  jQuery(this).find("input[name='id']");
+        if ($idInput.data('forcens')) {
+            id += ':';
+        }
+        $idInput.val(id);
 
         // Clean up the form vars, just to make the resultant URL a bit nicer
         ns.prop("disabled", true);

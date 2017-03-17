@@ -38,6 +38,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      */
     public function connectTo($mode) {
         $this->Lexer->addSpecialPattern('\{\{NEWPAGE[^\}]*\}\}', $mode, 'plugin_addnewpage');
+        $this->Lexer->addSpecialPattern('\{\{NEWNS[^\}]*\}\}', $mode, 'plugin_addnewpage');
     }
 
     /**
@@ -59,7 +60,14 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      */
     public function handle($match, $state, $pos, Doku_Handler $handler) {
         /* @codingStandardsIgnoreEnd */
-        $options = substr($match, 9, -2); // strip markup
+        if (substr($match, 2, 5) === 'NEWNS') {
+            $createNamespace = true;
+            $optionsStart = 7;
+        } else {
+            $createNamespace = false;
+            $optionsStart = 9;
+        }
+        $options = substr($match, $optionsStart, -2); // strip markup
         $options = explode('#', $options, 2);
 
         $namespace = trim(ltrim($options[0], '>'));
@@ -67,7 +75,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $templates = array_map('trim', $templates);
         return array(
             'namespace' => $namespace,
-            'newpagetemplates' => $templates
+            'newpagetemplates' => $templates,
+            'createNamespace' => $createNamespace,
         );
     }
 
@@ -103,7 +112,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 . DOKU_TAB . DOKU_TAB . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
                 . $newpagetemplateinput
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="do" value="edit" />' . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" />' . DOKU_LF
+                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" data-forcens="'.$data['createNamespace'].'" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />' . DOKU_LF
                 . DOKU_TAB . '</form>' . DOKU_LF
                 . '</div>';
