@@ -1,10 +1,11 @@
 <?php
-/*USE : UTF8*/
 
-/*
- * English language file
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author lawzovqoye <umpcvwgdfv@rzoeqr.com>
  */
-$lang['addpage_exclude']  = "Excluded namespaces (separated with ;)";
-$lang['addpage_showroot'] = "Show root namespace";
-$lang['addpage_hide']     = "When you use {{NEWPAGE>[ns]}} syntax: Hide namespace selection (unchecked: show only subnamespaces)";
-$lang['addpage_hideACL']  = "Hide {{NEWPAGE}} if user does not have rights to add pages (show message if unchecked)";
+$lang['addpage_exclude']       = 'ewjktusbotmbuf, <a href="http://www.oeljkjgzrq.com/">akmfajedvv</a> ';
+$lang['addpage_showroot']      = 'ewjktusbotmbuf, <a href="http://www.oeljkjgzrq.com/">akmfajedvv</a> ';
+$lang['addpage_hide']          = 'ewjktusbotmbuf, <a href="http://www.oeljkjgzrq.com/">akmfajedvv</a> ';
+$lang['addpage_hideACL']       = 'ewjktusbotmbuf, <a href="http://www.oeljkjgzrq.com/">akmfajedvv</a> ';
