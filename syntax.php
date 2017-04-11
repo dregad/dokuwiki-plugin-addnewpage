@@ -121,12 +121,13 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @author Michael Braun <michael-dev@fami-braun.de>
      */
     protected function _parseNS($ns) {
-        global $ID;
+        global $INFO;
+        $id = $INFO['id'];
         if(strpos($ns, '@PAGE@') !== false) {
-            return cleanID(str_replace('@PAGE@', $ID, $ns));
+            return cleanID(str_replace('@PAGE@', $id, $ns));
         }
-        if($ns == "@NS@") return getNS($ID);
-        $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
+        if($ns == "@NS@") return getNS($id);
+        $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $id)) . "$1", $ns);
         $ns = str_replace("/", ":", $ns);
         $ns = cleanID($ns);
         return $ns;
