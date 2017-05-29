@@ -1,30 +1,33 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
+    var $form = jQuery(".addnewpage form");
+    if (!$form.length) return;
 
-    // Start with disabled submit button
-    jQuery(".addnewpage :submit").prop("disabled", true);
-    // Then enable it when a title is entered
-    jQuery(".addnewpage input[name='title']").keyup(function(){
-        var $submit = jQuery(this).parent("form").find(":submit");
-        if (jQuery(this).val().length > 0) {
-            $submit.removeAttr("disabled");
-        } else {
-            // For when the user deletes the text
-            $submit.attr("disabled", "disabled");
-        }
-    }).keyup();
+    var $ns = $form.find("[name='np_cat']");
+    var $title = $form.find("input[name='title']");
+    var $id = $form.find("input[name='id']");
+    var $submit = $form.find(':submit');
+
+    // disable submit unless something is in input or input is disabled
+    if ($title.attr('type') === 'text') {
+        $submit.attr('disabled', 'disabled');
+        $title.keyup(function () {
+            if ($title.val().length > 0) {
+                $submit.removeAttr('disabled');
+            } else {
+                $submit.attr('disabled', 'disabled');
+            }
+        });
+    }
 
     // Change the form's page-ID field on submit
-    jQuery(".addnewpage form").submit(function(e) {
-
+    $form.submit(function () {
         // Build the new page ID and save in hidden form field
-        var ns = jQuery(this).find("[name='np_cat']");
-        var title = jQuery(this).find("input[name='title']");
-        var id = ns.val()+":"+title.val();
-        jQuery(this).find("input[name='id']").val(id);
+        var id = $ns.val().replace('@INPUT@', $title.val());
+        $id.val(id);
 
         // Clean up the form vars, just to make the resultant URL a bit nicer
-        ns.prop("disabled", true);
-        title.prop("disabled", true);
+        $ns.prop("disabled", true);
+        $title.prop("disabled", true);
 
         return true;
     });

@@ -12,6 +12,9 @@ if(!defined('DOKU_INC')) die();
  */
 class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
+    /** @var array the parsed options */
+    protected $options;
+
     /**
      * Syntax Type
      */
@@ -50,25 +53,44 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      *   {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
      *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
      *
-     * @param   string       $match   The text matched by the patterns
-     * @param   int          $state   The lexer state for the match
-     * @param   int          $pos     The character position of the matched text
+     * @param   string $match The text matched by the patterns
+     * @param   int $state The lexer state for the match
+     * @param   int $pos The character position of the matched text
      * @param   Doku_Handler $handler The Doku_Handler object
      * @return  array Return an array with all data you want to use in render
      * @codingStandardsIgnoreStart
      */
     public function handle($match, $state, $pos, Doku_Handler $handler) {
         /* @codingStandardsIgnoreEnd */
-        $options = substr($match, 9, -2); // strip markup
-        $options = explode('#', $options, 2);
+        $match = substr($match, 9, -2); // strip markup
 
-        $namespace = trim(ltrim($options[0], '>'));
-        $templates = explode(',', $options[1]);
-        $templates = array_map('trim', $templates);
-        return array(
-            'namespace' => $namespace,
-            'newpagetemplates' => $templates
+        $data = array(
+            'namespace' => '',
+            'newpagetemplates' => array(),
+            'options' => array(
+                'exclude' => $this->getConf('addpage_exclude'),
+                'showroot' => $this->getConf('addpage_showroot'),
+                'hide' => $this->getConf('addpage_hide'),
+                'hideacl' => $this->getConf('addpage_hideACL'),
+                'autopage' => $this->getConf('addpage_autopage'),
+            )
         );
+
+        if(preg_match('/>(.*?)(#|\?|$)/', $match, $m)) {
+            $data['namespace'] = trim($m[1]);
+        }
+
+        if(preg_match('/#(.*?)(\?|$)/', $match, $m)) {
+            $data['newpagetemplates'] = array_map('trim', explode(',', $m[1]));
+        }
+
+        if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
+            $this->_parseOptions($m[1], $data['options']);
+            // make options available in class
+            $this->options = $data['options'];
+        }
+
+        return $data;
     }
 
     /**
@@ -82,11 +104,14 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     public function render($mode, Doku_Renderer $renderer, $data) {
         global $lang;
 
+        // make options available in class
+        $this->options = $data['options'];
+
         if($mode == 'xhtml') {
             $disablecache = null;
             $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
             if($namespaceinput === false) {
-                if($this->getConf('addpage_hideACL')) {
+                if($this->options['hideacl']) {
                     $renderer->doc .= '';
                 } else {
                     $renderer->doc .= $this->getLang('nooption');
@@ -97,10 +122,13 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
+            $input = 'text';
+            if($this->options['autopage']) $input = 'hidden';
+
             $form = '<div class="addnewpage">' . DOKU_LF
                 . DOKU_TAB . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . $namespaceinput . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
+                . DOKU_TAB . DOKU_TAB . '<input class="edit" type="'.$input.'" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
                 . $newpagetemplateinput
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="do" value="edit" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" />' . DOKU_LF
@@ -115,21 +143,77 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     }
 
     /**
+     * Overwrites the $options with the ones parsed from $optstr
+     *
+     * @param string $optstr
+     * @param array $options
+     * @author Andreas Gohr <gohr@cosmocode.de>
+     */
+    protected function _parseOptions($optstr, &$options) {
+        $opts = preg_split('/[,&]/', $optstr);
+
+        foreach($opts as $opt) {
+            $opt = strtolower(trim($opt));
+            $val = true;
+            // booleans can be negated with a no prefix
+            if(substr($opt, 0, 2) == 'no') {
+                $opt = substr($opt, 2);
+                $val = false;
+            }
+
+            // not a known option? might be a key=value pair
+            if(!isset($options[$opt])) {
+                list($opt, $val) = array_map('trim', explode('=', $opt, 2));
+            }
+
+            // still unknown? skip it
+            if(!isset($options[$opt])) continue;
+
+            // overwrite the current value
+            $options[$opt] = $val;
+        }
+    }
+
+    /**
      * Parse namespace request
+     *
+     * This creates the final ID to be created (still having an @INPUT@ variable
+     * which is filled in via JavaScript)
      *
      * @author Samuele Tognini <samuele@cli.di.unipi.it>
      * @author Michael Braun <michael-dev@fami-braun.de>
+     * @author Andreas Gohr <gohr@cosmocode.de>
+     * @param string $ns The namespace as given in the syntax
+     * @return string
      */
     protected function _parseNS($ns) {
         global $INFO;
-        $id = $INFO['id'];
-        if(strpos($ns, '@PAGE@') !== false) {
-            return cleanID(str_replace('@PAGE@', $id, $ns));
-        }
-        if($ns == "@NS@") return getNS($id);
-        $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $id)) . "$1", $ns);
-        $ns = str_replace("/", ":", $ns);
+
+        $selfid = $INFO['id'];
+        $selfns = getNS($INFO['id']);
+        // replace the input variable with something unique that survives cleanID
+        $keep = sha1(time());
+
+        // by default append the input to the namespace (except on autopage)
+        if(strpos($ns, '@INPUT@') === false && !$this->options['autopage']) $ns .= ":@INPUT@";
+
+        // date replacements
+        $ns = dformat(null, $ns);
+
+        // placeholders
+        $replacements = array(
+            '/\//' => ':', // forward slashes to colons
+            '/@PAGE@/' => $selfid,
+            '/@NS@/' => $selfns,
+            '/^\.(:|\/|$)/' => "$selfns:",
+            '/@INPUT@/' => $keep,
+        );
+        $ns = preg_replace(array_keys($replacements), array_values($replacements), $ns);
+
+        // clean up, then reinsert the input variable
         $ns = cleanID($ns);
+        $ns = str_replace($keep, '@INPUT@', $ns);
+
         return $ns;
     }
 
@@ -147,7 +231,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         // If a NS has been provided:
         // Whether to hide the NS selection (otherwise, show only subnamespaces).
-        $hide = $this->getConf('addpage_hide');
+        $hide = $this->options['hide'];
 
         $parsed_dest_ns = $this->_parseNS($dest_ns);
         // Whether the user can create pages in the provided NS (or root, if no
@@ -172,7 +256,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $someopt = false;
 
         // Show root namespace if requested and allowed
-        if($this->getConf('addpage_showroot') && $can_create) {
+        if($this->options['showroot'] && $can_create) {
             if(empty($dest_ns)) {
                 // If no namespace has been provided, add an option for the root NS.
                 $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . 'value="">' . $this->getLang('namespaceRoot') . '</option>';
@@ -188,7 +272,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         // The top of this stack will always be the last printed ancestor namespace
         $ancestor_stack = array();
-        if (!empty($dest_ns)) {
+        if(!empty($dest_ns)) {
             array_push($ancestor_stack, $dest_ns);
         }
 
@@ -202,14 +286,14 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             }
 
             $nsparts = explode(':', $ns);
-            $first_unprinted_depth = empty($ancestor_stack)? 1 : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
-            for ($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
+            $first_unprinted_depth = empty($ancestor_stack) ? 1 : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
+            for($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
                 $namespace = implode(':', array_slice($nsparts, 0, $i));
                 array_push($ancestor_stack, $namespace);
                 $selectOptionText = str_repeat('&nbsp;&nbsp;', substr_count($namespace, ':')) . $nsparts[$i - 1];
                 $ret .= '<option ' .
                     (($currentns == $namespace) ? 'selected ' : '') .
-                    ($i == $end? ('value="' . $namespace . '">') : 'disabled>') .
+                    ($i == $end ? ('value="' . $namespace . '">') : 'disabled>') .
                     $selectOptionText .
                     '</option>';
             }
@@ -238,7 +322,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         $topns = utf8_encodeFN(str_replace(':', '/', $topns));
 
-        $excludes = $this->getConf('addpage_exclude');
+        $excludes = $this->options['exclude'];
         if($excludes == "") {
             $excludes = array();
         } else {
@@ -250,7 +334,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $namespaces = array();
         foreach($searchdata as $ns) {
             foreach($excludes as $exclude) {
-                if( ! empty($exclude) && strpos($ns['id'], $exclude) === 0) {
+                if(!empty($exclude) && strpos($ns['id'], $exclude) === 0) {
                     continue 2;
                 }
             }
@@ -273,7 +357,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         } else {
             if($cnt == 1) {
-                list($template, ) = $this->_parseNSTemplatePage($newpagetemplates[0]);
+                list($template,) = $this->_parseNSTemplatePage($newpagetemplates[0]);
                 $input = '<input type="hidden" name="newpagetemplate" value="' . formText($template) . '" />';
             } else {
                 $first = true;
@@ -283,8 +367,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                     $first = false;
 
                     list($template, $name) = $this->_parseNSTemplatePage($template);
-                    $p .= ' value="'.formText($template).'"';
-                    $input .= "<option $p>".formText($name)."</option>";
+                    $p .= ' value="' . formText($template) . '"';
+                    $input .= "<option $p>" . formText($name) . "</option>";
                 }
                 $input .= '</select>';
             }
@@ -307,7 +391,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $exist = null;
         resolve_pageid(getNS($ID), $template, $exist); //get absolute id
 
-        if (is_null($name)) $name = $template;
+        if(is_null($name)) $name = $template;
 
         return array($template, $name);
     }
