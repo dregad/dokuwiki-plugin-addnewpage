@@ -9,7 +9,7 @@ jQuery(function () {
         // disable submit unless something is in input or input is disabled
         if ($title.attr('type') === 'text') {
             $submit.attr('disabled', 'disabled');
-            $title.keyup(function () {
+            $title.on('input', function () {
                 if ($title.val().length > 0) {
                     $submit.removeAttr('disabled');
                 } else {
