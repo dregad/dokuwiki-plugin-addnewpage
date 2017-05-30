@@ -86,8 +86,6 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
             $this->_parseOptions($m[1], $data['options']);
-            // make options available in class
-            $this->options = $data['options'];
         }
 
         return $data;
