@@ -83,7 +83,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         global $lang;
 
         if($mode == 'xhtml') {
-            $disablecache = null;
+            $disablecache = true;
+            if($disablecache) $renderer->info['cache'] = false;
             $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
             if($namespaceinput === false) {
                 if($this->getConf('addpage_hideACL')) {
@@ -93,7 +94,6 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 }
                 return true;
             }
-            if($disablecache) $renderer->info['cache'] = false;
 
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
