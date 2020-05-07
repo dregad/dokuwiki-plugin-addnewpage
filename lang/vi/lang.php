@@ -1,8 +1,11 @@
 <?php
-/*
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ *
  * Vietnamese language file
+ *
  */
-$lang['namespaceRoot'] = "Gốc";
-$lang['okbutton']      = "Tạo trang mới";
-$lang['nooption']      = "Bạn không được phép tạo trang mới";
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'Gốc';
+$lang['okbutton']              = 'Tạo trang mới';
+$lang['nooption']              = 'Bạn không được phép tạo trang mới';
