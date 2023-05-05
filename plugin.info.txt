@@ -1,5 +1,5 @@
 # General Plugin Info
-base   addnewpage_ex
+base   addnewpagefork
 author Benjamin Santalucia, Sam Wilson, Michael Braun, Gerrit Uitslag, Albert Chern, Vladimir
 email
 date   2015-11-02
