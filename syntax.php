@@ -52,6 +52,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      *   {{NEWPAGE#newtpl1,newtpl2}}
      *   {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
      *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
+     *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1#@HI@,Howdy}}
      *
      * @param   string $match The text matched by the patterns
      * @param   int $state The lexer state for the match
@@ -67,6 +68,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $data = array(
             'namespace' => '',
             'newpagetemplates' => array(),
+            'newpagevars' => array(),
             'options' => array(
                 'exclude' => $this->getConf('addpage_exclude'),
                 'showroot' => $this->getConf('addpage_showroot'),
@@ -80,8 +82,9 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $data['namespace'] = trim($m[1]);
         }
 
-        if(preg_match('/#(.*?)(\?|$)/', $match, $m)) {
+        if(preg_match('/#(.*?)(#.*?)?(\?|$)/', $match, $m)) {
             $data['newpagetemplates'] = array_map('trim', explode(',', $m[1]));
+            $data['newpagevars'] = array_map('trim', explode(',', $m[2]));
         }
 
         if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
@@ -128,6 +131,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 . DOKU_TAB . DOKU_TAB . $namespaceinput . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input class="edit" type="'.$input.'" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
                 . $newpagetemplateinput
+                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="do" value="edit" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" />' . DOKU_LF
                 . DOKU_TAB . DOKU_TAB . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />' . DOKU_LF
