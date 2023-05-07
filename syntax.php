@@ -5,6 +5,9 @@
  * @license  GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author   iDO <ido@idotech.info>
  * @author   Sam Wilson <sam@samwilson.id.au>
+ *
+ * @noinspection PhpUnused,
+ *               PhpMissingParamTypeInspection, PhpMissingReturnTypeInspection
  */
 
 // must be run within Dokuwiki
@@ -77,17 +80,17 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     /**
      * Create the new-page form.
      *
-     * @param   $mode     string        output format being rendered
+     * @param   $format     string        output format being rendered
      * @param   $renderer Doku_Renderer the current renderer object
      * @param   $data     array         data created by handler()
      * @return  boolean                 rendered correctly?
      */
-    public function render($mode, Doku_Renderer $renderer, $data) {
+    public function render($format, Doku_Renderer $renderer, $data) {
         global $lang;
 
-        if($mode == 'xhtml') {
+        if($format == 'xhtml') {
             $disablecache = true;
-            if($disablecache) $renderer->info['cache'] = false;
+            $renderer->info['cache'] = false;
             $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
             if($namespaceinput === false) {
                 if($this->getConf('addpage_hideACL')) {
@@ -133,8 +136,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         if($ns == "@NS@") return getNS($ID);
         $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
         $ns = str_replace("/", ":", $ns);
-        $ns = cleanID($ns);
-        return $ns;
+
+        return cleanID($ns);
     }
 
     /**
@@ -179,13 +182,12 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         if($this->getConf('addpage_showroot') && $can_create) {
             if(empty($dest_ns)) {
                 // If no namespace has been provided, add an option for the root NS.
-                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . 'value="">' . $this->getLang('namespaceRoot') . '</option>';
-                $someopt = true;
+                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . ' value="">' . $this->getLang('namespaceRoot') . '</option>';
             } else {
                 // If a namespace has been provided, add an option for it.
-                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '') . 'value="' . formText($dest_ns) . '">' . formText($dest_ns) . '</option>';
-                $someopt = true;
+                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '') . ' value="' . formText($dest_ns) . '">' . formText($dest_ns) . '</option>';
             }
+            $someopt = true;
         }
 
         $subnamespaces = $this->_getNamespaceList($dest_ns);
@@ -193,7 +195,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         // The top of this stack will always be the last printed ancestor namespace
         $ancestor_stack = array();
         if (!empty($dest_ns)) {
-            array_push($ancestor_stack, $dest_ns);
+            $ancestor_stack[] = $dest_ns;
         }
 
         foreach($subnamespaces as $ns) {
@@ -209,7 +211,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $first_unprinted_depth = empty($ancestor_stack)? 1 : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
             for ($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
                 $namespace = implode(':', array_slice($nsparts, 0, $i));
-                array_push($ancestor_stack, $namespace);
+                $ancestor_stack[] = $namespace;
                 $selectOptionText = str_repeat('&nbsp;&nbsp;', substr_count($namespace, ':')) . $nsparts[$i - 1];
                 $ret .= '<option ' .
                     (($currentns == $namespace) ? 'selected ' : '') .
