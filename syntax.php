@@ -126,17 +126,18 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $input = 'text';
             if($this->options['autopage']) $input = 'hidden';
 
-            $form = '<div class="addnewpage">' . DOKU_LF
-                . DOKU_TAB . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">' . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . $namespaceinput . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input class="edit" type="'.$input.'" name="title" size="20" maxlength="255" tabindex="2" />' . DOKU_LF
+            $form = '<div class="addnewpage"><p>'
+                . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">'
+                . $namespaceinput
+                . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />'
                 . $newpagetemplateinput
-                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>' . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="do" value="edit" />' . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input type="hidden" name="id" />' . DOKU_LF
-                . DOKU_TAB . DOKU_TAB . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />' . DOKU_LF
-                . DOKU_TAB . '</form>' . DOKU_LF
-                . '</div>';
+                . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
+                . '<input type="hidden" name="do" value="edit" />'
+                . '<input type="hidden" name="id" />'
+                . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />'
+                . '</form>'
+                . '</p></div>';
+
             $renderer->doc .= $form;
 
             return true;
