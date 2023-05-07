@@ -1,9 +1,12 @@
 <?php
-/*
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ *
  * Ukrainian language file
+ *
+ * @author Олексій <alexey.furashev@gmail.com>
  */
-$lang['encoding']      = 'utf-8';
-$lang['direction']     = 'ltr';
-$lang['namespaceRoot'] = 'Кореневий простір імен';
-$lang['okbutton']      = 'Додати сторінку';
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'Кореневий простір імен';
+$lang['okbutton']              = 'Додати сторінку';
+$lang['nooption']              = 'Ви не можете додавати сторінки';
