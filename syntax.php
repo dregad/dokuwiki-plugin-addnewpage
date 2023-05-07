@@ -109,7 +109,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $this->options = $data['options'];
 
         if($mode == 'xhtml') {
-            $disablecache = null;
+            $disablecache = true;
+            if($disablecache) $renderer->info['cache'] = false;
             $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
             if($namespaceinput === false) {
                 if($this->options['hideacl']) {
@@ -119,7 +120,6 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 }
                 return true;
             }
-            if($disablecache) $renderer->info['cache'] = false;
 
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
@@ -193,7 +193,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         global $INFO;
 
         $selfid = $INFO['id'];
-        $selfns = getNS($INFO['id']);
+        $selfns = getNS($selfid);
         // replace the input variable with something unique that survives cleanID
         $keep = sha1(time());
 
