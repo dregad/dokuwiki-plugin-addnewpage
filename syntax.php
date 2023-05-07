@@ -1,8 +1,4 @@
 <?php
-
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
 /**
  * Add-New-Page Plugin: a simple form for adding new pages.
  *
@@ -10,6 +6,10 @@ if(!defined('DOKU_INC')) die();
  * @author   iDO <ido@idotech.info>
  * @author   Sam Wilson <sam@samwilson.id.au>
  */
+
+// must be run within Dokuwiki
+if(!defined('DOKU_INC')) die();
+
 class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
     /**
