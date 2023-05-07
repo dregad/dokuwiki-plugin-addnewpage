@@ -66,7 +66,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $namespace = trim(ltrim($options[0], '>'));
         $templates = explode(',', $options[1] ?? '');
         $templates = array_map('trim', $templates);
-        $newpagevars = trim($options[2]);
+        $newpagevars = trim($options[2] ?? '');
         return array(
             'namespace' => $namespace,
             'newpagetemplates' => $templates,
