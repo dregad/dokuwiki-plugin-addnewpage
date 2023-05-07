@@ -126,7 +126,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @author Michael Braun <michael-dev@fami-braun.de>
      */
     protected function _parseNS($ns) {
-        global $ID;
+        $ID=getID();
         if(strpos($ns, '@PAGE@') !== false) {
             return cleanID(str_replace('@PAGE@', $ID, $ns));
         }
