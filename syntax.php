@@ -11,6 +11,8 @@
  */
 
 // must be run within Dokuwiki
+use dokuwiki\File\PageResolver;
+
 if(!defined('DOKU_INC')) die();
 
 class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
@@ -309,10 +311,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         global $ID;
 
         @list($template, $name) = explode('|', $nstemplate, 2);
-
-        $exist = null;
-        resolve_pageid(getNS($ID), $template, $exist); //get absolute id
-
+        $template = (new PageResolver($ID))->resolveId($template);
         if (is_null($name)) $name = $template;
 
         return array($template, $name);
