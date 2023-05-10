@@ -11,6 +11,8 @@
  */
 
 // must be run within Dokuwiki
+use dokuwiki\File\PageResolver;
+
 if(!defined('DOKU_INC')) die();
 
 class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
@@ -112,8 +114,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $this->options = $data['options'];
 
         if($format == 'xhtml') {
-            $disablecache = true;
-            $renderer->info['cache'] = false;
+            $disablecache = false;
             $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
             if($namespaceinput === false) {
                 if($this->options['hideacl']) {
@@ -123,6 +124,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                 }
                 return true;
             }
+            if($disablecache) $renderer->info['cache'] = false;
 
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
@@ -392,11 +394,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         global $ID;
 
         @list($template, $name) = explode('|', $nstemplate, 2);
-
-        $exist = null;
-        resolve_pageid(getNS($ID), $template, $exist); //get absolute id
-
-        if(is_null($name)) $name = $template;
+        $template = (new PageResolver($ID))->resolveId($template);
+        if (is_null($name)) $name = $template;
 
         return array($template, $name);
     }
