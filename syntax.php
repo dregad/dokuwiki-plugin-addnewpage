@@ -134,7 +134,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $form = '<div class="addnewpage"><p>'
                 . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">'
                 . $namespaceinput
-                . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />'
+                . '<input class="edit" type="'.$input.'" name="title" size="20" maxlength="255" tabindex="2" />'
                 . $newpagetemplateinput
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
