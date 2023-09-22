@@ -10,12 +10,13 @@
  * @noinspection PhpMissingParamTypeInspection, PhpMissingReturnTypeInspection
  */
 
+use dokuwiki\Extension\SyntaxPlugin;
 use dokuwiki\File\PageResolver;
 
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_addnewpage extends SyntaxPlugin {
 
     /**
      * Syntax Type
