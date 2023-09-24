@@ -73,7 +73,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $data = array(
             'namespace' => '',
             'newpagetemplates' => array(),
-            'newpagevars' => array(),
+            'newpagevars' => '',
             'options' => array(
                 'exclude' => $this->getConf('addpage_exclude'),
                 'showroot' => $this->getConf('addpage_showroot'),
@@ -89,7 +89,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
 
         if(preg_match('/#(.*?)(#.*?)?(\?|$)/', $match, $m)) {
             $data['newpagetemplates'] = array_map('trim', explode(',', $m[1]));
-            $data['newpagevars'] = array_map('trim', explode(',', $m[2]));
+            $data['newpagevars'] = trim($m[2]);
         }
 
         if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
