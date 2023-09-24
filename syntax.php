@@ -107,9 +107,11 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
             $form = '<div class="addnewpage"><p>'
-                . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">'
+                . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT
+                    . '" accept-charset="' . $lang['encoding'] . '">'
                 . $namespaceinput
-                . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" />'
+                . '<input class="edit" type="text" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
+                    . $this->getLang('name') . '"/>'
                 . $newpagetemplateinput
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
