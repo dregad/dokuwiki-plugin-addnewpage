@@ -83,7 +83,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
     /**
      * Create the new-page form.
      *
-     * @param   $format     string        output format being rendered
+     * @param   $format   string        output format being rendered
      * @param   $renderer Doku_Renderer the current renderer object
      * @param   $data     array         data created by handler()
      * @return  boolean                 rendered correctly?
