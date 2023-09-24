@@ -49,20 +49,26 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     }
 
     /**
-     * Handler to prepare matched data for the rendering process
+     * Handler to prepare matched data for the rendering process.
      *
      * Handled syntax options:
-     *   {{NEWPAGE}}
-     *   {{NEWPAGE>your:namespace}}
-     *   {{NEWPAGE#newtpl1,newtpl2}}
-     *   {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
-     *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
-     *   {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1#@HI@,Howdy}}
+     * - {{NEWPAGE}}
+     * - {{NEWPAGE>your:namespace}}
+     * - {{NEWPAGE>your:namespace:@INPUT@:start}}
+     * - {{NEWPAGE>your:namespace:[date formats]}} {@see strftime()}
+     * - {{NEWPAGE?config_overrides}}
+     * - {{NEWPAGE#newtpl1,newtpl2}}
+     * - {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
+     * - {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
+     * - {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1#@HI@,Howdy}}
+     *
+     * Refer to {@see https://www.dokuwiki.org/plugin:addnewpage} for details.
      *
      * @param   string $match The text matched by the patterns
      * @param   int $state The lexer state for the match
      * @param   int $pos The character position of the matched text
      * @param   Doku_Handler $handler The Doku_Handler object
+     *
      * @return  array Return an array with all data you want to use in render
      * @codingStandardsIgnoreStart
      */
