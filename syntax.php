@@ -87,9 +87,12 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             $data['namespace'] = trim($m[1]);
         }
 
-        if(preg_match('/#(.*?)(#.*?)?(\?|$)/', $match, $m)) {
+        # Extract the newpagetemplate plugin parameters
+        # - after the initial #: the template name
+        # - after optional 2nd #: custom variable names
+        if(preg_match('/#(.*?)(?:#(.*?))?(?:\?|$)/', $match, $m)) {
             $data['newpagetemplates'] = array_map('trim', explode(',', $m[1]));
-            $data['newpagevars'] = trim($m[2]);
+            $data['newpagevars'] = trim($m[2] ?? '');
         }
 
         if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
