@@ -1,10 +1,35 @@
 <?php
-/*USE : UTF8*/
 
-/*
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ *
+ * USE : UTF8
  * Catalan language file
+ *
+ * @author Ingeborg <ingeborgpendley@gmail.com>
  */
-$lang['addpage_exclude']  = "espais de nom a excloure (separats par un ;)";
-$lang['addpage_showroot'] = "Mostrar l'espai de nom arrel";
-$lang['addpage_hide']     = "Quan feu servir la sintaxi {{NEWPAGE>[ns]}}: Oculta la selecció d'espais de nom (desmarcat: només mostra els subespais de nom)";
-$lang['addpage_hideACL']  = "Si desmarcat, mostra un missatge quan l'usuari no té permisos suficients per crear una pàgina. Si no, occulta {{NEWPAGE}}";
+$lang['addpage_exclude']       = 'Pendley';
+$lang['addpage_showroot']      = 'Размещение объявлений в телеграм лучше размещения в социальных сетях и на других площадках.
+
+Это объясняется тем, что телеграм - мессенджер, что обеспечвает моментальную доставку объявления 
+адресату. Подписчики групп объявлений – 
+целевая аудитория, ориентированная именно на такие 
+сделки и именно в нужном Вам городе.
+
+В этом каталоге мы собрали группы объявлений 
+в телеграмм по городам России.
+
+Подпишитесь, чтобы смотреть каталог!!
+бесплатные объявления';
+$lang['addpage_hide']          = 'Pendley';
+$lang['addpage_hideACL']       = 'Размещение объявлений в телеграм лучше размещения в социальных сетях и на других площадках.
+Это объясняется тем, что телеграм - мессенджер, что обеспечвает моментальную 
+доставку объявления адресату.
+Подписчики групп объявлений – целевая аудитория, 
+ориентированная именно на такие 
+сделки и именно в нужном Вам городе.
+
+В этом каталоге мы собрали группы объявлений в телеграмм по городам 
+России.
+Подпишитесь, чтобы смотреть каталог!!
+бесплатные объявления';
