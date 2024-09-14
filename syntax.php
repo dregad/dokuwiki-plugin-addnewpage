@@ -10,12 +10,13 @@
  * @noinspection PhpMissingParamTypeInspection, PhpMissingReturnTypeInspection
  */
 
+use dokuwiki\Extension\SyntaxPlugin;
 use dokuwiki\File\PageResolver;
 
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_addnewpage extends SyntaxPlugin {
 
     /** @var array the parsed options */
     protected $options;
@@ -111,7 +112,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     /**
      * Create the new-page form.
      *
-     * @param   $format     string        output format being rendered
+     * @param   $format   string        output format being rendered
      * @param   $renderer Doku_Renderer the current renderer object
      * @param   $data     array         data created by handler()
      * @return  boolean                 rendered correctly?
@@ -141,9 +142,11 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
             if($this->options['autopage']) $input = 'hidden';
 
             $form = '<div class="addnewpage"><p>'
-                . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT . '" accept-charset="' . $lang['encoding'] . '">'
+                . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT
+                    . '" accept-charset="' . $lang['encoding'] . '">'
                 . $namespaceinput
-                . '<input class="edit" type="'.$input.'" name="title" size="20" maxlength="255" tabindex="2" />'
+                . '<input class="edit" type="' . $input . '" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
+                    . $this->getLang('name') . '"/>'
                 . $newpagetemplateinput
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
