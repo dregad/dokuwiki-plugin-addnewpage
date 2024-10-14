@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author Michael <michael.kraemer@gmail.com>
  */
 $lang['addpage_exclude']       = 'Namespaces ausschließen (getrennt mit ; )';
