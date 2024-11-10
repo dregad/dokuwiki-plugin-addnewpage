@@ -58,6 +58,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * - {{NEWPAGE>your:namespace:@INPUT@:start}}
      * - {{NEWPAGE>your:namespace:[date formats]}} {@see strftime()}
      * - {{NEWPAGE?config_overrides}}
+     * - {{NEWPAGE?label=custom}}
      * - {{NEWPAGE#newtpl1,newtpl2}}
      * - {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
      * - {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
@@ -87,6 +88,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 'hide' => $this->getConf('addpage_hide'),
                 'hideacl' => $this->getConf('addpage_hideACL'),
                 'autopage' => $this->getConf('addpage_autopage'),
+                'label' => 'okbutton',
             )
         );
 
@@ -141,6 +143,12 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
             $input = 'text';
             if($this->options['autopage']) $input = 'hidden';
 
+            // Button label. If given string is not localized, use it as-is
+            $label = $this->getLang($this->options['label']);
+            if (!$label) {
+                $label = $this->options['label'];
+            }
+
             $form = '<div class="addnewpage"><p>'
                 . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT
                     . '" accept-charset="' . $lang['encoding'] . '">'
@@ -151,7 +159,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
                 . '<input type="hidden" name="id" />'
-                . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />'
+                . '<input class="button" type="submit" value="' . $label . '" tabindex="4" />'
                 . '</form>'
                 . '</p></div>';
 
