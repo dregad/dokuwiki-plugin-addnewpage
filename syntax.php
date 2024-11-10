@@ -183,7 +183,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
 
             // not a known option? might be a key=value pair
             if(!isset($options[$opt])) {
-                list($opt, $val) = array_map('trim', explode('=', $opt, 2));
+                list($opt, $val) = array_map('trim', sexplode('=', $opt, 2));
             }
 
             // still unknown? skip it
