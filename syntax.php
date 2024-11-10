@@ -181,24 +181,26 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         $opts = preg_split('/[,&]/', $optstr);
 
         foreach($opts as $opt) {
-            $opt = strtolower(trim($opt));
+            $opt_lower = strtolower(trim($opt));
             $val = true;
             // booleans can be negated with a no prefix
-            if(substr($opt, 0, 2) == 'no') {
-                $opt = substr($opt, 2);
+            if(substr($opt_lower, 0, 2) == 'no') {
+                $opt_lower = substr($opt, 2);
                 $val = false;
             }
 
             // not a known option? might be a key=value pair
-            if(!isset($options[$opt])) {
-                list($opt, $val) = array_map('trim', sexplode('=', $opt, 2));
+            if(!isset($options[$opt_lower])) {
+                $split = array_map('trim', sexplode('=', $opt, 2));
+                $opt_lower = strtolower($split[0]);
+                $val = $split[1];
             }
 
             // still unknown? skip it
-            if(!isset($options[$opt])) continue;
+            if(!isset($options[$opt_lower])) continue;
 
             // overwrite the current value
-            $options[$opt] = $val;
+            $options[$opt_lower] = $val;
         }
     }
 
