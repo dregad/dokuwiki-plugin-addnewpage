@@ -58,6 +58,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * - {{NEWPAGE>your:namespace:@INPUT@:start}}
      * - {{NEWPAGE>your:namespace:[date formats]}} {@see strftime()}
      * - {{NEWPAGE?config_overrides}}
+     * - {{NEWPAGE?label=custom}}
      * - {{NEWPAGE#newtpl1,newtpl2}}
      * - {{NEWPAGE#newtpl1|Title1,newtpl2|Title1}}
      * - {{NEWPAGE>your:namespace#newtpl1|Title1,newtpl2|Title1}}
@@ -87,6 +88,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 'hide' => $this->getConf('addpage_hide'),
                 'hideacl' => $this->getConf('addpage_hideACL'),
                 'autopage' => $this->getConf('addpage_autopage'),
+                'label' => 'okbutton',
             )
         );
 
@@ -141,6 +143,12 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
             $input = 'text';
             if($this->options['autopage']) $input = 'hidden';
 
+            // Button label. If given string is not localized, use it as-is
+            $label = $this->getLang($this->options['label']);
+            if (!$label) {
+                $label = $this->options['label'];
+            }
+
             $form = '<div class="addnewpage"><p>'
                 . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT
                     . '" accept-charset="' . $lang['encoding'] . '">'
@@ -151,7 +159,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
                 . '<input type="hidden" name="id" />'
-                . '<input class="button" type="submit" value="' . $this->getLang('okbutton') . '" tabindex="4" />'
+                . '<input class="button" type="submit" value="' . $label . '" tabindex="4" />'
                 . '</form>'
                 . '</p></div>';
 
@@ -173,24 +181,26 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         $opts = preg_split('/[,&]/', $optstr);
 
         foreach($opts as $opt) {
-            $opt = strtolower(trim($opt));
+            $opt_lower = strtolower(trim($opt));
             $val = true;
             // booleans can be negated with a no prefix
-            if(substr($opt, 0, 2) == 'no') {
-                $opt = substr($opt, 2);
+            if(substr($opt_lower, 0, 2) == 'no') {
+                $opt_lower = substr($opt, 2);
                 $val = false;
             }
 
             // not a known option? might be a key=value pair
-            if(!isset($options[$opt])) {
-                list($opt, $val) = array_map('trim', sexplode('=', $opt, 2));
+            if(!isset($options[$opt_lower])) {
+                $split = array_map('trim', sexplode('=', $opt, 2));
+                $opt_lower = strtolower($split[0]);
+                $val = $split[1];
             }
 
             // still unknown? skip it
-            if(!isset($options[$opt])) continue;
+            if(!isset($options[$opt_lower])) continue;
 
             // overwrite the current value
-            $options[$opt] = $val;
+            $options[$opt_lower] = $val;
         }
     }
 
