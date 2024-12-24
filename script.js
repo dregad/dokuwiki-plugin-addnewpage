@@ -1,10 +1,10 @@
 jQuery(function () {
     jQuery(".addnewpage form").each(function () {
-        var $form = jQuery(this);
-        var $ns = $form.find("[name='np_cat']");
-        var $title = $form.find("input[name='title']");
-        var $id = $form.find("input[name='id']");
-        var $submit = $form.find(':submit');
+        let $form = jQuery(this);
+        let $ns = $form.find("[name='np_cat']");
+        let $title = $form.find("input[name='title']");
+        let $id = $form.find("input[name='id']");
+        let $submit = $form.find(':submit');
 
         // disable submit unless something is in input or input is disabled
         if ($title.attr('type') === 'text') {
@@ -19,7 +19,7 @@ jQuery(function () {
         }
 
         // Change the form's page-ID field on submit
-        $form.submit(function () {
+        $form.on("submit", function () {
             const PLACEHOLDER = "@INPUT@";
 
             // Build the new page ID
