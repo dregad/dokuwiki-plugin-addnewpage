@@ -20,9 +20,21 @@ jQuery(function () {
 
         // Change the form's page-ID field on submit
         $form.submit(function () {
-            // Build the new page ID and save in hidden form field
-            var id = $ns.val().replace('@INPUT@', $title.val());
-            $id.val(id);
+            const PLACEHOLDER = "@INPUT@";
+
+            // Build the new page ID
+            let page_id = $ns.val();
+            if (page_id.indexOf(PLACEHOLDER) !== -1) {
+                // Process the placeholder
+                page_id = page_id.replace(PLACEHOLDER, $title.val());
+            } else {
+                // There is no placeholder, just append the user's input
+                page_id += ":" + $title.val();
+            }
+
+            // Save the new page ID in the hidden form field
+            $id.val(page_id);
+
             // Clean up the form vars, just to make the resultant URL a bit nicer
             $ns.prop("disabled", true);
             $title.prop("disabled", true);
