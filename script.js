@@ -6,7 +6,6 @@ jQuery(function () {
         var $id = $form.find("input[name='id']");
         var $submit = $form.find(':submit');
 
-console.log($ns);
         // disable submit unless something is in input or input is disabled
         if ($title.attr('type') === 'text') {
             $submit.attr('disabled', 'disabled');
@@ -18,7 +17,7 @@ console.log($ns);
                 }
             });
         }
-console.log($ns);
+
         // Change the form's page-ID field on submit
         $form.submit(function () {
             // Build the new page ID and save in hidden form field
