@@ -2,7 +2,7 @@
 base   addnewpage
 author Damien Regad, Benjamin Santalucia, Sam Wilson and other contributors
 email  dregad@mantisbt.org
-date   2025-04-22
+date   2025-08-03
 name   Add New Page plugin
 desc   Adds a "new page form" to any wiki page.
 url    https://www.dokuwiki.org/plugin:addnewpage
