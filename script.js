@@ -26,7 +26,7 @@ jQuery(function () {
             let page_id = $ns.val();
             if (page_id.indexOf(PLACEHOLDER) !== -1) {
                 // Process the placeholder
-                page_id = page_id.replace(PLACEHOLDER, $title.val());
+                page_id = page_id.replaceAll(PLACEHOLDER, $title.val());
             } else {
                 // There is no placeholder, just append the user's input
                 page_id += ":" + $title.val();
