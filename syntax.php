@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Add-New-Page Plugin: a simple form for adding new pages.
  *
@@ -13,39 +14,40 @@
 use dokuwiki\Extension\SyntaxPlugin;
 use dokuwiki\File\PageResolver;
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
-class syntax_plugin_addnewpage extends SyntaxPlugin {
-
+class syntax_plugin_addnewpage extends SyntaxPlugin
+{
     /** @var array the parsed options */
     protected $options;
 
     /**
      * Syntax Type
      */
-    public function getType() {
+    public function getType()
+    {
         return 'substition';
     }
 
     /**
      * Paragraph Type
      */
-    public function getPType() {
+    public function getPType()
+    {
         return 'block';
     }
 
     /**
      * @return int
      */
-    public function getSort() {
+    public function getSort()
+    {
         return 199;
     }
 
     /**
      * @param string $mode
      */
-    public function connectTo($mode) {
+    public function connectTo($mode)
+    {
         $this->Lexer->addSpecialPattern('\{\{NEWPAGE[^\}]*\}\}', $mode, 'plugin_addnewpage');
     }
 
@@ -78,11 +80,11 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         /* @codingStandardsIgnoreEnd */
         $match = substr($match, 9, -2); // strip markup
 
-        $data = array(
+        $data = [
             'namespace' => '',
-            'newpagetemplates' => array(),
+            'newpagetemplates' => [],
             'newpagevars' => '',
-            'options' => array(
+            'options' => [
                 'exclude' => $this->getConf('addpage_exclude'),
                 'showroot' => $this->getConf('addpage_showroot'),
                 'hide' => $this->getConf('addpage_hide'),
@@ -90,23 +92,23 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 'autopage' => $this->getConf('addpage_autopage'),
                 'createns' => $this->getConf('addpage_createns'),
                 'label' => 'okbutton',
-            )
-        );
+            ]
+        ];
 
-        if(preg_match('/>(.*?)(#|\?|$)/', $match, $m)) {
+        if (preg_match('/>(.*?)(#|\?|$)/', $match, $m)) {
             $data['namespace'] = trim($m[1]);
         }
 
         # Extract the newpagetemplate plugin parameters
         # - after the initial #: the template name
         # - after optional 2nd #: custom variable names
-        if(preg_match('/#(.*?)(?:#(.*?))?(?:\?|$)/', $match, $m)) {
+        if (preg_match('/#(.*?)(?:#(.*?))?(?:\?|$)/', $match, $m)) {
             $data['newpagetemplates'] = array_map('trim', explode(',', $m[1]));
             $data['newpagevars'] = trim($m[2] ?? '');
         }
 
-        if(preg_match('/\?(.*?)(#|$)/', $match, $m)) {
-            $this->_parseOptions($m[1], $data['options']);
+        if (preg_match('/\?(.*?)(#|$)/', $match, $m)) {
+            $this->parseOptions($m[1], $data['options']);
         }
 
         return $data;
@@ -120,29 +122,30 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param   $data     array         data created by handler()
      * @return  boolean                 rendered correctly?
      */
-    public function render($format, Doku_Renderer $renderer, $data) {
+    public function render($format, Doku_Renderer $renderer, $data)
+    {
         global $lang;
 
         // make options available in class
         $this->options = $data['options'];
 
-        if($format == 'xhtml') {
+        if ($format == 'xhtml') {
             $disablecache = false;
-            $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
-            if($namespaceinput === false) {
-                if($this->options['hideacl']) {
+            $namespaceinput = $this->htmlNamespaceInput($data['namespace'], $disablecache);
+            if ($namespaceinput === false) {
+                if ($this->options['hideacl']) {
                     $renderer->doc .= '';
                 } else {
                     $renderer->doc .= $this->getLang('nooption');
                 }
                 return true;
             }
-            if($disablecache) $renderer->info['cache'] = false;
+            if ($disablecache) $renderer->info['cache'] = false;
 
-            $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
+            $newpagetemplateinput = $this->htmlTemplateInput($data['newpagetemplates']);
 
             $input = 'text';
-            if($this->options['autopage']) $input = 'hidden';
+            if ($this->options['autopage']) $input = 'hidden';
 
             // Button label. If given string is not localized, use it as-is
             $label = $this->getLang($this->options['label']);
@@ -154,10 +157,11 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 . '<form name="addnewpage" method="get" action="' . DOKU_BASE . DOKU_SCRIPT
                     . '" accept-charset="' . $lang['encoding'] . '">'
                 . $namespaceinput
-                . '<input class="edit" type="' . $input . '" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
+                . '<input class="edit" type="' . $input
+                    . '" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
                     . $this->getLang('name')
                     // Use a data attribute to pass the createns option's state to JavaScript
-                    . '" data-createns="' . $this->options['createns'] 
+                    . '" data-createns="' . $this->options['createns']
                     . '"/>'
                 . $newpagetemplateinput
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
@@ -181,27 +185,28 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param array $options
      * @author Andreas Gohr <gohr@cosmocode.de>
      */
-    protected function _parseOptions($optstr, &$options) {
+    protected function parseOptions($optstr, &$options)
+    {
         $opts = preg_split('/[,&]/', $optstr);
 
-        foreach($opts as $opt) {
+        foreach ($opts as $opt) {
             $opt_lower = strtolower(trim($opt));
             $val = true;
             // booleans can be negated with a no prefix
-            if(substr($opt_lower, 0, 2) == 'no') {
+            if (substr($opt_lower, 0, 2) == 'no') {
                 $opt_lower = substr($opt, 2);
                 $val = false;
             }
 
             // not a known option? might be a key=value pair
-            if(!isset($options[$opt_lower])) {
+            if (!isset($options[$opt_lower])) {
                 $split = array_map('trim', sexplode('=', $opt, 2));
                 $opt_lower = strtolower($split[0]);
                 $val = $split[1];
             }
 
             // still unknown? skip it
-            if(!isset($options[$opt_lower])) continue;
+            if (!isset($options[$opt_lower])) continue;
 
             // overwrite the current value
             $options[$opt_lower] = $val;
@@ -220,7 +225,8 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param string $ns The namespace as given in the syntax
      * @return string
      */
-    protected function _parseNS($ns) {
+    protected function parseNS($ns)
+    {
         global $INFO;
 
         $selfid = $INFO['id'];
@@ -229,19 +235,19 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         $keep = sha1(time());
 
         // by default append the input to the namespace (except on autopage)
-        if(strpos($ns, '@INPUT@') === false && !$this->options['autopage']) $ns .= ":@INPUT@";
+        if (strpos($ns, '@INPUT@') === false && !$this->options['autopage']) $ns .= ":@INPUT@";
 
         // date replacements
         $ns = dformat(null, $ns);
 
         // placeholders
-        $replacements = array(
+        $replacements = [
             '/\//' => ':', // forward slashes to colons
             '/@PAGE@/' => $selfid,
             '/@NS@/' => $selfns,
             '/^\.(:|\/|$)/' => "$selfns:",
             '/@INPUT@/' => $keep,
-        );
+        ];
         $ns = preg_replace(array_keys($replacements), array_values($replacements), $ns);
 
         // clean up, then reinsert the input variable
@@ -257,7 +263,8 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @global string $ID The page ID
      * @return string Select element with appropriate NS selected.
      */
-    protected function _htmlNamespaceInput($dest_ns, &$disablecache) {
+    protected function htmlNamespaceInput($dest_ns, &$disablecache)
+    {
         global $ID;
         $disablecache = false;
 
@@ -265,14 +272,14 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         // Whether to hide the NS selection (otherwise, show only subnamespaces).
         $hide = $this->options['hide'];
 
-        $parsed_dest_ns = $this->_parseNS($dest_ns);
+        $parsed_dest_ns = $this->parseNS($dest_ns);
         // Whether the user can create pages in the provided NS (or root, if no
         // destination NS has been set.
         $can_create = (auth_quickaclcheck($parsed_dest_ns . ":") >= AUTH_CREATE);
 
         //namespace given, but hidden
-        if($hide && !empty($dest_ns)) {
-            if($can_create) {
+        if ($hide && !empty($dest_ns)) {
+            if ($can_create) {
                 return '<input type="hidden" name="np_cat" id="np_cat" value="' . $parsed_dest_ns . '"/>';
             } else {
                 return false;
@@ -288,37 +295,40 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
         $someopt = false;
 
         // Show root namespace if requested and allowed
-        if($this->options['showroot'] && $can_create) {
-            if(empty($dest_ns)) {
+        if ($this->options['showroot'] && $can_create) {
+            if (empty($dest_ns)) {
                 // If no namespace has been provided, add an option for the root NS.
-                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . ' value="">' . $this->getLang('namespaceRoot') . '</option>';
+                $ret .= '<option ' . (($currentns == '') ? 'selected ' : '')
+                    . ' value="">' . $this->getLang('namespaceRoot') . '</option>';
             } else {
                 // If a namespace has been provided, add an option for it.
-                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '') . ' value="' . formText($dest_ns) . '">' . formText($dest_ns) . '</option>';
+                $ret .= '<option ' . (($currentns == $dest_ns) ? 'selected ' : '')
+                    . ' value="' . formText($dest_ns) . '">' . formText($dest_ns) . '</option>';
             }
             $someopt = true;
         }
 
-        $subnamespaces = $this->_getNamespaceList($dest_ns);
+        $subnamespaces = $this->getNamespaceList($dest_ns);
 
         // The top of this stack will always be the last printed ancestor namespace
-        $ancestor_stack = array();
+        $ancestor_stack = [];
         if (!empty($dest_ns)) {
             $ancestor_stack[] = $dest_ns;
         }
 
-        foreach($subnamespaces as $ns) {
-
-            if(auth_quickaclcheck($ns . ":") < AUTH_CREATE) continue;
+        foreach ($subnamespaces as $ns) {
+            if (auth_quickaclcheck($ns . ":") < AUTH_CREATE) continue;
 
             // Pop any elements off the stack that are not ancestors of the current namespace
-            while(!empty($ancestor_stack) && strpos($ns, $ancestor_stack[count($ancestor_stack) - 1] . ':') !== 0) {
+            while ($ancestor_stack !== [] && strpos($ns, $ancestor_stack[count($ancestor_stack) - 1] . ':') !== 0) {
                 array_pop($ancestor_stack);
             }
 
             $nsparts = explode(':', $ns);
-            $first_unprinted_depth = empty($ancestor_stack) ? 1 : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
-            for($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
+            $first_unprinted_depth = $ancestor_stack === []
+                ? 1
+                : (2 + substr_count($ancestor_stack[count($ancestor_stack) - 1], ':'));
+            for ($i = $first_unprinted_depth, $end = count($nsparts); $i <= $end; $i++) {
                 $namespace = implode(':', array_slice($nsparts, 0, $i));
                 $ancestor_stack[] = $namespace;
                 $selectOptionText = str_repeat('&nbsp;&nbsp;', substr_count($namespace, ':')) . $nsparts[$i - 1];
@@ -334,7 +344,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
 
         $ret .= '</select>';
 
-        if($someopt) {
+        if ($someopt) {
             return $ret;
         } else {
             return false;
@@ -348,24 +358,25 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param string $topns The top namespace
      * @return array Multi-dimensional array of all namespaces below $tns
      */
-    protected function _getNamespaceList($topns = '') {
+    protected function getNamespaceList($topns = '')
+    {
         global $conf;
 
         $topns = utf8_encodeFN(str_replace(':', '/', $topns));
 
         $excludes = $this->options['exclude'];
-        if($excludes == "") {
-            $excludes = array();
+        if ($excludes == "") {
+            $excludes = [];
         } else {
             $excludes = @explode(';', strtolower($excludes));
         }
-        $searchdata = array();
-        search($searchdata, $conf['datadir'], 'search_namespaces', array(), $topns);
+        $searchdata = [];
+        search($searchdata, $conf['datadir'], 'search_namespaces', [], $topns);
 
-        $namespaces = array();
-        foreach($searchdata as $ns) {
-            foreach($excludes as $exclude) {
-                if(!empty($exclude) && strpos($ns['id'], $exclude) === 0) {
+        $namespaces = [];
+        foreach ($searchdata as $ns) {
+            foreach ($excludes as $exclude) {
+                if (!empty($exclude) && strpos($ns['id'], $exclude) === 0) {
                     continue 2;
                 }
             }
@@ -381,23 +392,23 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param array $newpagetemplates array of namespace templates
      * @return string html of select or hidden input
      */
-    public function _htmlTemplateInput($newpagetemplates) {
+    public function htmlTemplateInput($newpagetemplates)
+    {
         $cnt = count($newpagetemplates);
-        if($cnt < 1 || $cnt == 1 && $newpagetemplates[0] == '') {
+        if ($cnt < 1 || $cnt == 1 && $newpagetemplates[0] == '') {
             $input = '';
-
         } else {
-            if($cnt == 1) {
-                list($template,) = $this->_parseNSTemplatePage($newpagetemplates[0]);
+            if ($cnt == 1) {
+                [$template, ] = $this->parseNSTemplatePage($newpagetemplates[0]);
                 $input = '<input type="hidden" name="newpagetemplate" value="' . formText($template) . '" />';
             } else {
                 $first = true;
                 $input = '<select name="newpagetemplate" tabindex="3">';
-                foreach($newpagetemplates as $template) {
+                foreach ($newpagetemplates as $template) {
                     $p = ($first ? ' selected="selected"' : '');
                     $first = false;
 
-                    list($template, $name) = $this->_parseNSTemplatePage($template);
+                    [$template, $name] = $this->parseNSTemplatePage($template);
                     $p .= ' value="' . formText($template) . '"';
                     $input .= "<option $p>" . formText($name) . "</option>";
                 }
@@ -414,14 +425,14 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
      * @param $nstemplate
      * @return array
      */
-    protected function _parseNSTemplatePage($nstemplate) {
+    protected function parseNSTemplatePage($nstemplate)
+    {
         global $ID;
 
-        @list($template, $name) = explode('|', $nstemplate, 2);
+        @[$template, $name] = explode('|', $nstemplate, 2);
         $template = (new PageResolver($ID))->resolveId($template);
         if (is_null($name)) $name = $template;
 
-        return array($template, $name);
+        return [$template, $name];
     }
-
 }
