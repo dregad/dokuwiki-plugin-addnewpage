@@ -88,6 +88,7 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                 'hide' => $this->getConf('addpage_hide'),
                 'hideacl' => $this->getConf('addpage_hideACL'),
                 'autopage' => $this->getConf('addpage_autopage'),
+                'createns' => $this->getConf('addpage_createns'),
                 'label' => 'okbutton',
             )
         );
@@ -154,7 +155,10 @@ class syntax_plugin_addnewpage extends SyntaxPlugin {
                     . '" accept-charset="' . $lang['encoding'] . '">'
                 . $namespaceinput
                 . '<input class="edit" type="' . $input . '" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
-                    . $this->getLang('name') . '"/>'
+                    . $this->getLang('name')
+                    // Use a data attribute to pass the createns option's state to JavaScript
+                    . '" data-createns="' . $this->options['createns'] 
+                    . '"/>'
                 . $newpagetemplateinput
                 . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'

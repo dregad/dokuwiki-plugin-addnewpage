@@ -24,12 +24,19 @@ jQuery(function () {
 
             // Build the new page ID
             let page_id = $ns.val();
+            let page_title = $title.val();
+
+            // Prevent subnamespace creation
+            if (!$title.data('createns')) {
+                page_title = page_title.replaceAll(':', '_');
+            }
+
             if (page_id.indexOf(PLACEHOLDER) !== -1) {
                 // Process the placeholder
-                page_id = page_id.replaceAll(PLACEHOLDER, $title.val());
-            } else if ($title.val()) {
+                page_id = page_id.replaceAll(PLACEHOLDER, page_title);
+            } else if (page_title) {
                 // There is no placeholder, just append the user's input (if any)
-                page_id += ":" + $title.val();
+                page_id += ":" + page_title;
             }
 
             // Save the new page ID in the hidden form field

@@ -4,3 +4,4 @@ $meta['addpage_showroot'] = array('onoff');
 $meta['addpage_hide']     = array('onoff');
 $meta['addpage_hideACL']  = array('onoff');
 $meta['addpage_autopage'] = array('onoff');
+$meta['addpage_createns'] = array('onoff');
