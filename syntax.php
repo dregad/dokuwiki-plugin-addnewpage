@@ -229,6 +229,10 @@ class syntax_plugin_addnewpage extends SyntaxPlugin
     {
         global $INFO;
 
+        # If $INFO is not available, then the @PAGE@ AND @NS@ cannot be processed
+        if (!$INFO && (strpos($ns, '@PAGE@') !== false || strpos($ns, '@NS@') !== false)) {
+            return false;
+        }
         $selfid = $INFO['id'];
         $selfns = getNS($selfid);
         // replace the input variable with something unique that survives cleanID
