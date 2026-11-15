@@ -5,6 +5,7 @@
  * 
  * @author Daniele Savasta <danielesavasta@tiscali.it>
  * @author Mirko <malisan.mirko@gmail.com>
+ * @author Tassoman <tassoman@gmail.com>
  */
 $lang['namespaceRoot']         = 'Root';
 $lang['okbutton']              = 'Aggiungi Pagina';
