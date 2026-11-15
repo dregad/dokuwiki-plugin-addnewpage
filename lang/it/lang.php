@@ -6,6 +6,7 @@
  * @author Daniele Savasta <danielesavasta@tiscali.it>
  * @author Mirko <malisan.mirko@gmail.com>
  */
-$lang['namespaceRoot']         = 'Root';
+$lang['namespaceRoot']         = 'Inizio';
+$lang['name']                  = "Nome pagina";
 $lang['okbutton']              = 'Aggiungi Pagina';
-$lang['nooption']              = 'Non sei autorizzato ad aggiungere nuove pagine';
+$lang['nooption']              = 'Non puoi aggiungere nuove pagine';
