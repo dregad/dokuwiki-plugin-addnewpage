@@ -161,13 +161,13 @@ class syntax_plugin_addnewpage extends SyntaxPlugin
                     . '" name="title" size="20" maxlength="255" tabindex="2" placeholder="'
                     . $this->getLang('name')
                     // Use a data attribute to pass the createns option's state to JavaScript
-                    . '" data-createns="' . $this->options['createns']
+                    . '" data-createns="' . hsc($this->options['createns'])
                     . '"/>'
                 . $newpagetemplateinput
-                . '<input type="hidden" name="newpagevars" value="' . $data['newpagevars'] . '"/>'
+                . '<input type="hidden" name="newpagevars" value="' . hsc($data['newpagevars']) . '"/>'
                 . '<input type="hidden" name="do" value="edit" />'
                 . '<input type="hidden" name="id" />'
-                . '<input class="button" type="submit" value="' . $label . '" tabindex="4" />'
+                . '<input class="button" type="submit" value="' . hsc($label) . '" tabindex="4" />'
                 . '</form>'
                 . '</p></div>';
 
